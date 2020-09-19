@@ -1985,6 +1985,7 @@
 #include "code\modules\mob\living\simple_animal\friendly\mushroom.dm"
 #include "code\modules\mob\living\simple_animal\friendly\slime.dm"
 #include "code\modules\mob\living\simple_animal\friendly\spiderbot.dm"
+#include "code\modules\mob\living\simple_animal\friendly\pets\blackbeak.dm"
 #include "code\modules\mob\living\simple_animal\hostile\alien.dm"
 #include "code\modules\mob\living\simple_animal\hostile\armalis.dm"
 #include "code\modules\mob\living\simple_animal\hostile\bat.dm"

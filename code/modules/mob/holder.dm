@@ -542,6 +542,15 @@ var/list/holder_mob_icon_cache = list()
 	//contained_sprite = 1 //Part of contained sprite overhaul, not yet ported
 	w_class = ITEM_SIZE_NORMAL
 
+/obj/item/weapon/holder/blackbeak
+	name = "blackbeak"
+	desc = "A tiny penguin, that was adopted as the pet of the Blackshield's guardhouse by the Sergeant Evans."
+	icon = 'icons/mob/blackbeak.dmi'
+	icon_state = "blackbeak"
+	item_state = "blackbeak"
+	icon_state_dead = "blackbeak_dead"
+	slot_flags = SLOT_HEAD
+	w_class = ITEM_SIZE_TINY
 
 //Holders for mice
 /obj/item/weapon/holder/mouse
