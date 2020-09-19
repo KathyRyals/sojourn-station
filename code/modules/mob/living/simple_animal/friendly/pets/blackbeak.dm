@@ -1,5 +1,5 @@
 /mob/living/simple_animal/blackbeak
-    name = "blackbeak"
+	name = "\improper blackbeak"
 	real_name = "blackbeak"
 	desc = "A tiny penguin, that was adopted as the pet of the Blackshield's guardhouse by the Sergeant Evans."
 	icon = 'icons/mob/blackbeak.dmi'
@@ -45,8 +45,6 @@
 
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
 	meat_amount = 1
-
-	var/body_color //brown, gray and white, leave blank for random
 
 	var/soft_squeaks = list('sound/effects/creatures/mouse_squeaks_1.ogg',
 	'sound/effects/creatures/mouse_squeaks_2.ogg',
@@ -103,35 +101,16 @@
 /mob/living/simple_animal/blackbeak/speak_audio()
 	squeak_soft(0)
 
-/mob/living/simple_animal/blackbeak/beg(var/atom/thing, var/atom/holder)
-	squeak_soft(0)
-	visible_emote("squeaks timidly, sniffs the air and gazes longingly up at \the [thing.name].",0)
-
-/mob/living/simple_animal/mouse/attack_hand(mob/living/carbon/human/M as mob)
+/mob/living/simple_animal/blackbeak/attack_hand(mob/living/carbon/human/M as mob)
 	if (src.stat == DEAD)//If the mouse is dead, we don't pet it, we just pickup the corpse on click
 		get_scooped(M, usr)
 		return
 	else
 		..()
 
-/mob/living/simple_animal/mouse/proc/splat()
-	src.health = 0
-	src.death()
-	src.icon_dead = "mouse_[body_color]_splat"
-	src.icon_state = "mouse_[body_color]_splat"
-
-//Plays a sound.
-//This is triggered when a mob steps on an NPC mouse, or manually by a playermouse
-/mob/living/simple_animal/mouse/proc/squeak(var/manual = 1)
-	if (stat == CONSCIOUS)
-		playsound(src, 'sound/effects/mousesqueek.ogg', 70, 1)
-		if (manual)
-			log_say("[key_name(src)] squeaks! ")
-
-
 //Plays a random selection of four sounds, at a low volume
 //This is triggered randomly periodically by any mouse, or manually
-/mob/living/simple_animal/mouse/proc/squeak_soft(var/manual = 1)
+/mob/living/simple_animal/blackbeak/proc/squeak_soft(var/manual = 1)
 	if (stat != DEAD) //Soft squeaks are allowed while sleeping
 		var/list/new_squeaks = last_softsqueak ? soft_squeaks - last_softsqueak : soft_squeaks
 		var/sound = pick(new_squeaks)
@@ -140,64 +119,17 @@
 		playsound(src, sound, 5, 1, -4.6)
 
 		if (manual)
-			log_say("[key_name(src)] squeaks softly! ")
+			log_say("[key_name(src)] peeps softly! ")
 
 
-//Plays a loud sound
-//Triggered manually, when a mouse dies, or rarely when its stepped on
-/mob/living/simple_animal/mouse/proc/squeak_loud(var/manual = 0)
-	if (stat == CONSCIOUS)
-
-		if (squeals > 0 || !manual)
-			playsound(src, 'sound/effects/creatures/mouse_squeak_loud.ogg', 40, 1)
-			squeals --
-			log_say("[key_name(src)] squeals! ")
-		else
-			to_chat(src, "<span class='warning'>Your hoarse mousey throat can't squeal just now, stop and take a breath!</span>")
-
-
-//Wrapper verbs for the squeak functions
-/mob/living/simple_animal/mouse/verb/squeak_loud_verb()
-	set name = "Squeal!"
-	set category = "Abilities"
-
-	if (usr.client.prefs.muted & MUTE_IC)
-		to_chat(usr, "<span class='danger'>You are muted from IC emotes.</span>")
-		return
-
-	squeak_loud(1)
-
-/mob/living/simple_animal/mouse/verb/squeak_soft_verb()
-	set name = "Soft Squeaking"
-	set category = "Abilities"
-
-	if (usr.client.prefs.muted & MUTE_IC)
-		to_chat(usr, "<span class='danger'>You are muted from IC emotes.</span>")
-		return
-
-	squeak_soft(1)
-
-/mob/living/simple_animal/mouse/verb/squeak_verb()
-	set name = "Squeak"
-	set category = "Abilities"
-
-	if (usr.client.prefs.muted & MUTE_IC)
-		to_chat(usr, "<span class='danger'>You are muted from IC emotes.</span>")
-		return
-
-	squeak(1)
-
-
-/mob/living/simple_animal/mouse/Crossed(AM as mob|obj)
+/mob/living/simple_animal/blackbeak/Crossed(AM as mob|obj)
 	if( ishuman(AM) )
 		if(!stat)
 			var/mob/M = AM
-			to_chat(M, "<span class='notice'>\icon[src] Squeek!</span>")
+			to_chat(M, "<span class='notice'>\icon[src] peeps!</span>")
 			poke(1) //Wake up if stepped on
 			if (prob(95))
-				squeak(0)
-			else
-				squeak_loud(0)//You trod on its tail
+				squeak_soft(0)
 
 	if(!health)
 		return
@@ -205,18 +137,9 @@
 
 	..()
 
-/mob/living/simple_animal/mouse/death()
+/mob/living/simple_animal/blackbeak/death()
 	layer = MOB_LAYER
-	if (stat != DEAD)
-		if(ckey || prob(35))
-			squeak_loud(0)//deathgasp
-
-		addtimer(CALLBACK(src, .proc/dust), decompose_time)
-
 	..()
-
-/mob/living/simple_animal/mouse/dust()
-	..(anim = "dust_[body_color]", remains = /obj/item/remains/mouse, iconfile = icon)
 
 //Mice can bite mobs, deals 1 damage, and stuns the mouse for a second
 /mob/living/simple_animal/mouse/AltClickOn(A)
@@ -232,47 +155,6 @@
 /*
  * Mouse types
  */
-
-/mob/living/simple_animal/mouse/white
-	body_color = "white"
-	icon_state = "mouse_white"
-	icon_rest = "mouse_white_sleep"
-	holder_type = /obj/item/weapon/holder/mouse/white
-
-/mob/living/simple_animal/mouse/gray
-	body_color = "gray"
-	icon_state = "mouse_gray"
-	icon_rest = "mouse_gray_sleep"
-	holder_type = /obj/item/weapon/holder/mouse/gray
-
-/mob/living/simple_animal/mouse/brown
-	body_color = "brown"
-	icon_state = "mouse_brown"
-	icon_rest = "mouse_brown_sleep"
-	holder_type = /obj/item/weapon/holder/mouse/brown
-
-/mob/living/simple_animal/mouse/hooded
-	body_color = "hooded"
-	icon_state = "mouse_hooded"
-	icon_rest = "mouse_hooded_sleep"
-	holder_type = /obj/item/weapon/holder/mouse/hooded
-
-/mob/living/simple_animal/mouse/irish
-	body_color = "irish"
-	icon_state = "mouse_irish"
-	icon_rest = "mouse_irish_sleep"
-	holder_type = /obj/item/weapon/holder/mouse/irish
-
-/mob/living/simple_animal/mouse/brown/Tom
-	name = "Tom"
-	real_name = "Tom"
-	desc = "Jerry the cat is not amused."
-
-/mob/living/simple_animal/mouse/brown/Tom/Initialize()
-	. = ..()
-	// Change my name back, don't want to be named Tom (666)
-	name = initial(name)
-	real_name = name
 
 /mob/living/simple_animal/mouse/cannot_use_vents()
 	return
