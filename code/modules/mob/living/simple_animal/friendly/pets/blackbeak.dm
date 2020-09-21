@@ -3,9 +3,9 @@
 	real_name = "blackbeak"
 	desc = "A tiny penguin, that was adopted as the pet of the Blackshield's guardhouse by the Sergeant Evans."
 	icon = 'icons/mob/blackbeak.dmi'
-	icon_state = "blackbeak"
-	item_state = "blackbeak"
-	icon_living = "blackbeak"
+	icon_state = "blackbeak_red"
+	item_state = "blackbeak_red"
+	icon_living = "blackbeak_red"
 	icon_dead = "blackbeak_dead"
 	icon_rest = "blackbeak_dead"
 	can_nap = TRUE
